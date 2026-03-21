@@ -1,24 +1,81 @@
-# Proxmox Next VMID Configuration Utility
+# Proxmox & Ubuntu Utils
+
+A collection of utility scripts for Proxmox VE and Ubuntu homelab environments.
+
+> **⚠️ Important:**  
+> Before running any script, **review its contents** to understand exactly what it will do to your system.  
+> Use at your own risk. The authors are not responsible for any data loss or system issues.
+
+---
+
+## 🐳 Docker + Dockhand Installer (Ubuntu)
+
+Installs **Docker Engine**, **Docker Compose plugin**, and **[Dockhand](https://dockhand.pro)** — a modern Docker management UI — on Ubuntu 22.04 / 24.04 in a single command.
+
+**What it does:**
+- Updates the system (non-interactive, preserves existing configs)
+- Installs Docker Engine via the official Docker GPG repository
+- Adds your user to the `docker` group
+- Deploys Dockhand as a Docker container at `http://<your-ip>:3000`
+- Cleans up apt cache
+
+To run the script, use:
+
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils/main/install-docker-dockhand.sh)"
+```
+
+**Optional — change the default port (3000):**
+
+```
+DOCKHAND_PORT=8080 bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils/main/install-docker-dockhand.sh)"
+```
+
+After installation, open Dockhand in your browser:
+
+```
+http://<your-server-ip>:3000
+```
+
+**Manage Dockhand after install:**
+
+```bash
+# View logs
+docker compose -f /opt/dockhand/docker-compose.yml logs -f
+
+# Stop
+docker compose -f /opt/dockhand/docker-compose.yml down
+
+# Update to latest
+docker compose -f /opt/dockhand/docker-compose.yml pull
+docker compose -f /opt/dockhand/docker-compose.yml up -d
+```
+
+**Requirements:**
+- Ubuntu 22.04 LTS or 24.04 LTS
+- Root privileges (`sudo`)
+
+---
+
+## 🔧 Proxmox Next VMID Configuration Utility
 
 This script allows you to set the **starting VMID range** for automatically assigned VMIDs in **Proxmox VE 8.1 or newer**, without modifying the Perl source code.
 
 Proxmox now supports setting the VMID range via `datacenter.cfg`.
 
-> **⚠️ Important:**  
-> Before running this script, **review its contents** to understand exactly what it will do to your system.  
-> 
-> Use it at your own risk. The authors are not responsible for any data loss or system issues that may result from running this script.
-
 To run the script, use:
 
-```bash
+```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils/main/set-vmid-start.sh)"
- ```
+```
+
 ---
-## 🔧 What This Script Does
+
+### 🔧 What This Script Does
 
 - Prompts for a **new starting VMID** (e.g. 200)
 - Updates `/etc/pve/datacenter.cfg` with:
+
   ```
   next-id: lower=200,upper=1000000
   ```
@@ -29,21 +86,21 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils
 
 Example prompt:
 
-```bash
+```
 👉 Enter the new starting VMID (e.g. 200): 200
 ```
 
 ---
 
-## 📁 Example Output in `/etc/pve/datacenter.cfg`
+### 📁 Example Output in `/etc/pve/datacenter.cfg`
 
-```ini
+```
 next-id: lower=200,upper=1000000
 ```
 
 ---
 
-## 🔁 To Restore Original
+### 🔁 To Restore Original
 
 Each run makes a timestamped backup like:
 
@@ -53,24 +110,24 @@ Each run makes a timestamped backup like:
 
 You can manually restore it with:
 
-```bash
+```
 cp /etc/pve/datacenter.cfg.bak.<timestamp> /etc/pve/datacenter.cfg
 ```
 
 ---
 
-## 🛡️ Requirements
+### 🛡️ Requirements
 
 - Proxmox VE 8.1 or later
 - Root privileges
 
 ---
 
-## 💡 Tip
+### 💡 Tip
 
 To test the new behavior:
 
-```bash
+```
 pvesh get /cluster/nextid
 ```
 
