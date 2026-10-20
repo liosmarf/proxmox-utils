@@ -22,13 +22,13 @@ Installs **Docker Engine**, **Docker Compose plugin**, and **[Dockhand](https://
 To run the script, use:
 
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils/main/install-docker-dockhand.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmarf/proxmox-utils/main/install-docker-dockhand.sh)"
 ```
 
 **Optional — change the default port (3000):**
 
 ```
-DOCKHAND_PORT=8080 bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmar123/proxmox-utils/main/install-docker-dockhand.sh)"
+DOCKHAND_PORT=8080 bash -c "$(curl -fsSL https://raw.githubusercontent.com/liosmarf/proxmox-utils/main/install-docker-dockhand.sh)"
 ```
 
 After installation, open Dockhand in your browser:
